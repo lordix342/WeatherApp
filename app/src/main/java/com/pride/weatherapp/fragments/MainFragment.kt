@@ -21,8 +21,8 @@ import com.pride.weatherapp.logic.WeatherViewModel
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var plauncher: ActivityResultLauncher<String>
-    private val fragmentList = listOf(Hours(),Days())
-    private val tableList = listOf("Hours","Days")
+    private val fragmentList = listOf(Days(),Hours())
+    private val tableList = listOf("Days","Hours")
     private val weatherVM : WeatherViewModel by activityViewModels()
 
 
@@ -41,6 +41,9 @@ class MainFragment : Fragment() {
         weatherVM.getCurrentFromRepo()
         weatherVM.currentWeather.observe(viewLifecycleOwner) {
             if (it!=null) initCurrent(it)
+        }
+        binding.imageSync.setOnClickListener {
+            weatherVM.getCurrentFromRepo()
         }
     }
 

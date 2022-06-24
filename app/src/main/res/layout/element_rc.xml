@@ -9,7 +9,8 @@
         android:id="@+id/cardDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#664689B5"
+        android:layout_margin="3dp"
+        app:cardBackgroundColor="#994689B5"
         app:cardCornerRadius="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,8 +72,8 @@
 
                     <ImageView
                         android:id="@+id/imgWeather"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_marginBottom="5dp"
@@ -96,7 +97,8 @@
                 android:shadowRadius="2"
                 android:text="MaxMin T"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textWind"
@@ -108,7 +110,8 @@
                 android:shadowRadius="2"
                 android:text="Wind speed"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textChanceOfRain"
@@ -120,7 +123,8 @@
                 android:shadowRadius="2"
                 android:text="Chance Rain"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/textChanceOfSnow"
@@ -132,7 +136,8 @@
                 android:shadowRadius="2"
                 android:text="Chance of Show"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/bMoreInfo"
@@ -141,7 +146,8 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:text="More info" />
+                android:text="More info"
+                android:visibility="gone" />
 
         </LinearLayout>
 

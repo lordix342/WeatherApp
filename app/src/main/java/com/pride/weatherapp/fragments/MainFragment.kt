@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
-import com.pride.weatherapp.clases.Current
+import com.pride.weatherapp.clases.WeatherClass
 import com.pride.weatherapp.databinding.FragmentMainBinding
 import com.pride.weatherapp.logic.PageAdapter
 import com.pride.weatherapp.logic.WeatherViewModel
@@ -38,12 +38,15 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         chekPermission()
         initViewPager()
-        weatherVM.getCurrentFromRepo()
+        weatherVM.getWeatherFromRepo()
         weatherVM.currentWeather.observe(viewLifecycleOwner) {
             if (it!=null) initCurrent(it)
         }
         binding.imageSync.setOnClickListener {
-            weatherVM.getCurrentFromRepo()
+            weatherVM.getWeatherFromRepo()
+        }
+        weatherVM.obsHour.observe(viewLifecycleOwner) {
+            if (it) binding.pager.currentItem = 1
         }
     }
 
@@ -55,7 +58,7 @@ class MainFragment : Fragment() {
         }.attach()
     }
 
-    private fun initCurrent(dataCurrent : Current) {
+    private fun initCurrent(dataCurrent : WeatherClass) {
         with(binding) {
             textCountry.text = dataCurrent.location.country
             cityName.text = dataCurrent.location.name
@@ -77,6 +80,7 @@ class MainFragment : Fragment() {
             plauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
     }
+
     private fun permissionListener() {
         plauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (!it)  chekPermission()

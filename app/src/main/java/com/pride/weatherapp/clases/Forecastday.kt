@@ -11,7 +11,7 @@ data class Forecastday(
     @SerializedName("day")
     val day: Day,
     @SerializedName("hour")
-    val hour: List<Hour>
+    val hour: ArrayList<Hour>
 )
 
 data class Astro(

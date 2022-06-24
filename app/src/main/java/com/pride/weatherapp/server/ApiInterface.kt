@@ -1,6 +1,6 @@
 package com.pride.weatherapp.server
 
-import com.pride.weatherapp.clases.Current
+import com.pride.weatherapp.clases.WeatherClass
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -10,8 +10,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 interface ApiInterface {
-        @GET("v1/current.json?key=bdbb753421a44e00a37171142222106&q=Kalush&aqi=no")
-        fun getCurrent(): Call<Current>
+        @GET("v1/forecast.json?key=bdbb753421a44e00a37171142222106&q=Kalush&days=5&aqi=no&alerts=no")
+        fun getWeather(): Call<WeatherClass>
 
 }
 

@@ -3,8 +3,8 @@ package com.pride.weatherapp.logic
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pride.weatherapp.clases.Day
 import com.pride.weatherapp.clases.Forecast
+import com.pride.weatherapp.clases.Hour
 import com.pride.weatherapp.clases.WeatherClass
 import com.pride.weatherapp.server.ApiRepo
 import kotlinx.coroutines.launch
@@ -16,9 +16,12 @@ class WeatherViewModel:ViewModel() {
     private var repository = ApiRepo()
     private var _currentWeather: MutableLiveData<WeatherClass> = MutableLiveData()
     private var _daysWeather: MutableLiveData<Forecast> = MutableLiveData()
+    private var _selectedHours: MutableLiveData<ArrayList<Hour>> = MutableLiveData()
     var currentWeather: MutableLiveData<WeatherClass> = MutableLiveData()
     var daysWeather: MutableLiveData<Forecast> = MutableLiveData()
     var obsHour : MutableLiveData<Boolean> = MutableLiveData()
+    var selectedHours : MutableLiveData<ArrayList<Hour>> = MutableLiveData()
+
 
     fun getWeatherFromRepo() {
         viewModelScope.launch {
@@ -31,6 +34,8 @@ class WeatherViewModel:ViewModel() {
                     currentWeather.value = _currentWeather.value
                     _daysWeather.value = _currentWeather.value?.forecast
                     daysWeather.value = _daysWeather.value
+                    _selectedHours.value = _daysWeather.value?.forecastday?.get(0)?.hour
+                    selectedHours.value = _selectedHours.value
                 }
 
                 override fun onFailure(call: Call<WeatherClass>, t: Throwable) {
@@ -39,15 +44,16 @@ class WeatherViewModel:ViewModel() {
             })
         }
     }
-    fun openDetailInfo() {
+    fun openDetailInfo(hours : ArrayList<Hour>) {
         viewModelScope.launch {
             obsHour.value = true
+            _selectedHours.value = hours
+            selectedHours.value = _selectedHours.value
         }
     }
-    fun openedDetail(day: Day) {
+    fun openedDetail() {
         viewModelScope.launch {
             obsHour.value = false
         }
     }
-
 }

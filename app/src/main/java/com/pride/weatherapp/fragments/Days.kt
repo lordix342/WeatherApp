@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.pride.weatherapp.R
 import com.pride.weatherapp.clases.Forecastday
 import com.pride.weatherapp.databinding.FragmentDaysBinding
 import com.pride.weatherapp.logic.ClickListener
@@ -27,7 +26,7 @@ class Days : Fragment(), ClickListener {
     }
 
     override fun onClick(day: Forecastday) {
-      weatherVM.openDetailInfo()
+      weatherVM.openDetailInfo(day.hour)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -30,9 +30,9 @@ class RecyclerAdapter(private val context: Context, private val clickListener: C
                 if (!isExpand) {
                     with(binding) {
                         textTemp.text = day.day.maxtempC.toString() + "/" + day.day.mintempC.toString() + " °C"
-                        textWind.text = "Wind speed"+day.day.maxwindKph.toString() + "Km/h"
-                        textChanceOfRain.text = "Chance of rain"+day.day.dailyChanceOfRain.toString() + "%"
-                        textChanceOfSnow.text = "Chance of snow"+day.day.dailyChanceOfSnow.toString() + "%"
+                        textWind.text = "Wind speed "+day.day.maxwindKph.toString() + "Km/h"
+                        textChanceOfRain.text = "Chance of rain "+day.day.dailyChanceOfRain.toString() + "%"
+                        textChanceOfSnow.text = "Chance of snow "+day.day.dailyChanceOfSnow.toString() + "%"
                         textTemp.visibility = View.VISIBLE
                         textWind.visibility = View.VISIBLE
                         textChanceOfRain.visibility = View.VISIBLE

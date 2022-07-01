@@ -23,9 +23,10 @@ class WeatherViewModel:ViewModel() {
     var selectedHours : MutableLiveData<ArrayList<Hour>> = MutableLiveData()
 
 
-    fun getWeatherFromRepo() {
+    fun getWeatherFromRepo(location:String,language: String) {
+
         viewModelScope.launch {
-            repository.getCurrentWeather().enqueue(object : Callback<WeatherClass> {
+            repository.getCurrentWeather(location,language).enqueue(object : Callback<WeatherClass> {
                 override fun onResponse(
                     call: Call<WeatherClass>,
                     response: Response<WeatherClass>

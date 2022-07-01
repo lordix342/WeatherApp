@@ -10,6 +10,9 @@ import com.bumptech.glide.Glide
 import com.pride.weatherapp.R
 import com.pride.weatherapp.clases.Hour
 import com.pride.weatherapp.databinding.ElementRcBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecyclerAdapterHours(private val context: Context) :
     RecyclerView.Adapter<RecyclerAdapterHours.HourHolder>() {
@@ -20,7 +23,11 @@ class RecyclerAdapterHours(private val context: Context) :
         private var isExpand = false
         private val binding = ElementRcBinding.bind(itemView)
         fun bind(hour: Hour,  context: Context) = with(binding) {
-            textDate.text = hour.time
+
+            val dateFormat =  SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val dateLastB = dateFormat.parse(hour.time)
+            val date = Date(dateLastB.time ?: 0L)
+            textDate.text = date.hours.toString() +":00"
             textWeather.text = hour.condition.text
             Glide.with(context)
                 .load("http:" + hour.condition.icon)

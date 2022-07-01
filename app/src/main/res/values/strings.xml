@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">Weather App</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="days_tab">Days</string>
+    <string name="hours_tab">HOURS</string>
+    <string name="error_gps">Need enable GPS</string>
+    <string name="error_network">No internet connection</string>
+    <string name="country">Country</string>
+    <string name="weather_icon">weather icon</string>
+    <string name="city">City</string>
+    <string name="temperature">Temperature</string>
+    <string name="region">Region</string>
+    <string name="synchronization">Synchronization</string>
+    <string name="hours">Hours</string>
+    <string name="days">Days</string>
+    <string name="more_info">More details</string>
+    <string name="chance_of_show">Chance of Show</string>
+    <string name="chance_rain">Chance Rain</string>
+    <string name="wind_speed">Wind speed</string>
 </resources>

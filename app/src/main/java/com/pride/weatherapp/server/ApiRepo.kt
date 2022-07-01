@@ -4,7 +4,7 @@ import com.pride.weatherapp.clases.WeatherClass
 import retrofit2.Call
 
 class ApiRepo {
-    fun getCurrentWeather(): Call<WeatherClass> {
-        return ApiInstance.api.getWeather()
+    fun getCurrentWeather(location:String,language: String): Call<WeatherClass> {
+        return ApiInstance.api.getWeather(location,language)
     }
 }

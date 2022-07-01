@@ -108,7 +108,7 @@
                 android:padding="2dp"
                 android:shadowColor="#000000"
                 android:shadowRadius="2"
-                android:text="Wind speed"
+                android:text="@string/wind_speed"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:visibility="gone" />
@@ -121,7 +121,7 @@
                 android:padding="2dp"
                 android:shadowColor="#000000"
                 android:shadowRadius="2"
-                android:text="Chance Rain"
+                android:text="@string/chance_rain"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:visibility="gone" />
@@ -134,7 +134,7 @@
                 android:padding="2dp"
                 android:shadowColor="#000000"
                 android:shadowRadius="2"
-                android:text="Chance of Show"
+                android:text="@string/chance_of_show"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:visibility="gone" />
@@ -146,7 +146,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:text="More info"
+                android:text="@string/more_info"
                 android:visibility="gone" />
 
         </LinearLayout>

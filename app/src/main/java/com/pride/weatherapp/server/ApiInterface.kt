@@ -8,10 +8,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiInterface {
-        @GET("v1/forecast.json?key=bdbb753421a44e00a37171142222106&q=Kalush&days=5&aqi=no&alerts=no")
-        fun getWeather(): Call<WeatherClass>
+        @GET("v1/forecast.json?key=bdbb753421a44e00a37171142222106&days=5&aqi=no&alerts=no")
+        fun getWeather(@Query("q")location: String, @Query("lang") language: String): Call<WeatherClass>
 
 }
 

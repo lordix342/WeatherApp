@@ -36,9 +36,9 @@ class RecyclerAdapterHours(private val context: Context) :
                 if (!isExpand) {
                     with(binding) {
                         textTemp.text = hour.tempC.toString() + " °C"
-                        textWind.text = "Wind speed "+hour.windKph.toString() + "Km/h"
-                        textChanceOfRain.text = "Chance of rain "+hour.chanceOfRain.toString() + "%"
-                        textChanceOfSnow.text = "Chance of snow "+hour.chanceOfSnow.toString() + "%"
+                        textWind.text = context.resources.getString(R.string.wind_speed)+" "+hour.windKph.toString() + "Km/h"
+                        textChanceOfRain.text = context.resources.getString(R.string.chance_rain)+" "+hour.chanceOfRain.toString() + "%"
+                        textChanceOfSnow.text = context.resources.getString(R.string.chance_of_snow)+" "+hour.chanceOfSnow.toString() + "%"
                         textTemp.visibility = View.VISIBLE
                         textWind.visibility = View.VISIBLE
                         textChanceOfRain.visibility = View.VISIBLE

@@ -37,7 +37,6 @@
                         android:id="@+id/textDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
                         android:gravity="center_vertical"
                         android:padding="2dp"
                         android:shadowColor="#000000"
@@ -134,7 +133,7 @@
                 android:padding="2dp"
                 android:shadowColor="#000000"
                 android:shadowRadius="2"
-                android:text="@string/chance_of_show"
+                android:text="@string/chance_of_snow"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:visibility="gone" />

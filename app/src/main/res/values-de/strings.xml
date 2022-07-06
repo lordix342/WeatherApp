@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wetter-App</string>
+    <string name="hello_blank_fragment">Hallo leeres Fragment </string>
+    <string name="days_tab">Tage</string>
+    <string name="hours_tab">STD</string>
+    <string name="error_gps"> Muss GPS aktivieren</string>
+    <string name="error_network">Internetverbindung</string>
+    <string name="country">Land</string>
+    <string name="weather_icon">Wettersymbol</string>
+    <string name="city">stadt</string>
+    <string name="temperature">Temperatur</string>
+    <string name="region"> region</string>
+    <string name="synchronization">Synchronisation</string>
+    <string name="hours">std</string>
+    <string name="days">tage</string>
+    <string name="more_info">Mehr Details</string>
+    <string name="chance_of_snow">Schneewahrscheinlichkeit</string>
+    <string name="chance_rain">Chance Regen</string>
+    <string name="wind_speed">Windgeschwindigkeit</string>
+    <string name="no_internet_connection">Keine Internetverbindung</string>
+    <string name="try_again">Versuchen Sie es nochmal</string>
+    <string name="gps_error">Sie müssen der App Zugriff auf Ihren Standort gewähren</string>
+    <string name="button_gps">OK</string>
+</resources>

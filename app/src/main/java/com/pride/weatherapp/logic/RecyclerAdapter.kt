@@ -26,13 +26,12 @@ class RecyclerAdapter(private val context: Context, private val clickListener: C
                 .load("http:" + day.day.condition.icon)
                 .into(binding.imgWeather)
             binding.cardDay.setOnClickListener {
-                //clickListener.onClick(itemView)
                 if (!isExpand) {
                     with(binding) {
                         textTemp.text = day.day.maxtempC.toString() + "/" + day.day.mintempC.toString() + " °C"
-                        textWind.text = "Wind speed "+day.day.maxwindKph.toString() + "Km/h"
-                        textChanceOfRain.text = "Chance of rain "+day.day.dailyChanceOfRain.toString() + "%"
-                        textChanceOfSnow.text = "Chance of snow "+day.day.dailyChanceOfSnow.toString() + "%"
+                        textWind.text = context.resources.getString(R.string.wind_speed)+" "+day.day.maxwindKph.toString() + "Km/h"
+                        textChanceOfRain.text = context.resources.getString(R.string.chance_rain)+" "+day.day.dailyChanceOfRain.toString() + "%"
+                        textChanceOfSnow.text = context.resources.getString(R.string.chance_of_snow)+" "+day.day.dailyChanceOfSnow.toString() + "%"
                         textTemp.visibility = View.VISIBLE
                         textWind.visibility = View.VISIBLE
                         textChanceOfRain.visibility = View.VISIBLE

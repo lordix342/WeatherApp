@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">تطبيق الطقس</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="days_tab">أيام</string>
+    <string name="hours_tab">ساعات</string>
+    <string name="error_gps">تحتاج إلى تمكين GPS </string>
+    <string name="error_network"> لا يوجد اتصال بالإنترنت</string>
+    <string name="country">دولة</string>
+    <string name="weather_icon">رمز الطقس</string>
+    <string name="city">مدينة</string>
+    <string name="temperature">درجة الحرارة </string>
+    <string name="region"> منطقة</string>
+    <string name="synchronization"> التزامن </string>
+    <string name="hours"> ساعات</string>
+    <string name="days"> أيام</string>
+    <string name="more_info">المزيد من التفاصيل</string>
+    <string name="chance_of_snow">فرصة للثلج</string>
+    <string name="chance_rain">فرصة المطر</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="no_internet_connection">لا يوجد اتصال بالإنترنت</string>
+    <string name="try_again">حاول مرة أخرى</string>
+    <string name="gps_error">تحتاج إلى منح التطبيق حق الوصول إلى موقعك</string>
+    <string name="button_gps">OK</string>
+</resources>

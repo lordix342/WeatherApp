@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">天气应用</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="days_tab">天 </string>
+    <string name="hours_tab">小时 </string>
+    <string name="error_gps">需要启用 GPS </string>
+    <string name="error_network">没有网络连接 </string>
+    <string name="country">国家 </string>
+    <string name="weather_icon"> </string>
+    <string name="city">城市</string>
+    <string name="temperature">天气图标</string>
+    <string name="region">温度</string>
+    <string name="synchronization">同步时间 </string>
+    <string name="hours">地区</string>
+    <string name="days">天</string>
+    <string name="more_info">更多细节</string>
+    <string name="chance_of_snow">雪的机会</string>
+    <string name="chance_rain">机会雨 </string>
+    <string name="wind_speed">风速</string>
+    <string name="no_internet_connection">没有网络连接</string>
+    <string name="try_again">再试一次</string>
+    <string name="gps_error">您需要授予应用访问您的位置的权限</string>
+    <string name="button_gps">OK</string>
+</resources>

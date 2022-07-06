@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">天気アプリ</string>
+    <string name="hello_blank_fragment"> </string>
+    <string name="days_tab">日々</string>
+    <string name="hours_tab">時間</string>
+    <string name="error_gps">GPSを有効にする必要が </string>
+    <string name="error_network">インターネットに接続していません </string>
+    <string name="country">国</string>
+    <string name="weather_icon">天気アイコン </string>
+    <string name="city">街</string>
+    <string name="temperature">Temperature</string>
+    <string name="region">温度</string>
+    <string name="synchronization">同期時間 </string>
+    <string name="hours">領域</string>
+    <string name="days">日々</string>
+    <string name="more_info">詳細</string>
+    <string name="chance_of_snow">雪のチャンス</string>
+    <string name="chance_rain">チャンスレイン </string>
+    <string name="wind_speed">風速</string>
+    <string name="no_internet_connection">インターネットに接続していません</string>
+    <string name="try_again">再試行</string>
+    <string name="gps_error">あなたはアプリにあなたの場所へのアクセスを与える必要があります</string>
+    <string name="button_gps">OK</string>
+</resources>

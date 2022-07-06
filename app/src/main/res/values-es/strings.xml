@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aplicación del tiempo  </string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="days_tab">Días </string>
+    <string name="hours_tab">HORAS</string>
+    <string name="error_gps">Necesita habilitar GPS</string>
+    <string name="error_network">Sin conexión a Internet </string>
+    <string name="country">País</string>
+    <string name="weather_icon">icono del tiempo</string>
+    <string name="city">Ciudad</string>
+    <string name="temperature">La temperatura </string>
+    <string name="region">Región</string>
+    <string name="synchronization">sincronización </string>
+    <string name="hours">Horas de</string>
+    <string name="days">Días</string>
+    <string name="more_info">Más detalles</string>
+    <string name="chance_of_snow">Probabilidad de nieve</string>
+    <string name="chance_rain">Probabilidad de lluvia</string>
+    <string name="wind_speed">Velocidad del viento</string>
+    <string name="no_internet_connection">Sin conexión a Internet</string>
+    <string name="try_again">Intentar otra vez</string>
+    <string name="gps_error">Necesitas darle a la aplicación acceso a tu ubicación</string>
+    <string name="button_gps">OK</string>
+</resources>

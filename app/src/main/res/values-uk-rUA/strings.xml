@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Погода</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="days_tab">Дні</string>
+    <string name="hours_tab">Години</string>
+    <string name="error_gps">Потрібно включити GPS</string>
+    <string name="error_network">Немає підключення до мережі</string>
+    <string name="country">Країна</string>
+    <string name="weather_icon">іконка погоди</string>
+    <string name="city">Місто</string>
+    <string name="temperature">Температура</string>
+    <string name="region">Область</string>
+    <string name="synchronization">Синхронізація</string>
+    <string name="hours">Години</string>
+    <string name="days">Дні</string>
+    <string name="more_info">Детальніше</string>
+    <string name="chance_of_snow">Ймовірність снігу</string>
+    <string name="chance_rain">Ймовірність дощу</string>
+    <string name="wind_speed">Швидкість вітру</string>
+    <string name="no_internet_connection">Відсутній інтернет</string>
+    <string name="try_again">Спробувати знову</string>
+    <string name="gps_error">Для роботи додатка потрібно надати доступ до місцерозташування</string>
+    <string name="button_gps">OK</string>
+</resources>

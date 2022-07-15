@@ -1,6 +1,6 @@
 package com.pride.weatherapp.fragments
 
-import android.Manifest
+
 import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.Context.LOCATION_SERVICE
@@ -15,9 +15,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -35,13 +33,11 @@ import java.util.*
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private lateinit var plauncher: ActivityResultLauncher<String>
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var latitude: String
     private lateinit var longitude: String
     private val fragmentList = listOf(Days(), Hours())
     private val weatherVM: WeatherViewModel by activityViewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,11 +45,6 @@ class MainFragment : Fragment() {
     ): View {
         binding = FragmentMainBinding.inflate(inflater)
         return binding.root
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        chekPermission()
     }
 
     override fun onResume() {
@@ -64,7 +55,17 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewPager()
+        weatherVM.obsHour.observe(viewLifecycleOwner) {
+            if (it) binding.pager.currentItem = 1
+        }
         chekGPSAgree()
+        binding.bTryGps.setOnClickListener {
+            getAgree()
+        }
+        getLocation()
+        weatherVM.message.observe(viewLifecycleOwner) {
+            if (it != null) Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+        }
         weatherVM.currentWeather.observe(viewLifecycleOwner) {
             if (it != null) initCurrent(it)
         }
@@ -75,54 +76,37 @@ class MainFragment : Fragment() {
             binding.internetError.visibility = View.GONE
             getLocation()
         }
-        binding.bTryGps.setOnClickListener {
-            getAgree()
-        }
-        weatherVM.obsHour.observe(viewLifecycleOwner) {
-            if (it) binding.pager.currentItem = 1
-        }
-        getLocation()
-    }
-
-    private fun chekGPSAgree() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        val agree = sharedPref?.getInt("Agree", 0)
-        if (agree!=1) binding.gpsError.visibility = View.VISIBLE
-    }
-
-    private fun getAgree() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        if (sharedPref!=null) {
-            with (sharedPref.edit()) {
-                putInt("Agree", 1)
-                apply()
-            }
-        }
-        binding.gpsError.visibility = View.GONE
-        getLocation()
     }
 
     private fun getLocation() {
-        binding.gpsEnable.visibility = View.GONE
-        val locationManager =
-            requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager
-        if (locationManager.isProviderEnabled(GPS_PROVIDER)) {
-            fusedLocationProviderClient =
-                LocationServices.getFusedLocationProviderClient(requireContext())
-            fusedLocationProviderClient.lastLocation.addOnCompleteListener {
-                val location: Location? = it.result
-                if (location != null) {
-                    latitude = location.latitude.toString()
-                    longitude = location.longitude.toString()
-                    isConnected()
+        var permission: Boolean? = false
+        weatherVM.checkPermission.observe(viewLifecycleOwner) { confirmPermission ->
+            if (confirmPermission != null) permission = confirmPermission.confirmation
+            if (permission == true) {
+                val locationManager =
+                    requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager
+                if (locationManager.isProviderEnabled(GPS_PROVIDER)) {
+                    binding.gpsEnable.visibility = View.GONE
+                    fusedLocationProviderClient =
+                        LocationServices.getFusedLocationProviderClient(requireContext())
+                    fusedLocationProviderClient.lastLocation.addOnCompleteListener {
+                        val location: Location? = it.result
+                        if (location != null) {
+                            latitude = location.latitude.toString()
+                            longitude = location.longitude.toString()
+                            isConnected()
+                        }
+                    }
+                } else {
+                    if ((!binding.gpsError.isVisible) && (!binding.internetError.isVisible)) {
+                        binding.gpsEnable.visibility = View.VISIBLE
+                        binding.bEnableGps.setOnClickListener {
+                            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                        }
+                    }
                 }
-            }
-        } else {
-            if ((!binding.gpsError.isVisible)&&(!binding.internetError.isVisible)) {
-                binding.gpsEnable.visibility = View.VISIBLE
-                binding.bEnableGps.setOnClickListener {
-                    startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                }
+            } else {
+                Toast.makeText(requireContext(), "No permission", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -146,6 +130,24 @@ class MainFragment : Fragment() {
         })
     }
 
+    private fun chekGPSAgree() {
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        val agree = sharedPref?.getInt("Agree", 0)
+        if (agree != 1) binding.gpsError.visibility = View.VISIBLE
+    }
+
+    private fun getAgree() {
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        if (sharedPref != null) {
+            with(sharedPref.edit()) {
+                putInt("Agree", 1)
+                apply()
+            }
+        }
+        binding.gpsError.visibility = View.GONE
+        getLocation()
+    }
+
     private fun initViewPager() {
         val tableList =
             listOf(resources.getString(R.string.days_tab), resources.getString(R.string.hours_tab))
@@ -166,22 +168,5 @@ class MainFragment : Fragment() {
         Glide.with(requireContext())
             .load("http:" + dataCurrent.current.condition.icon)
             .into(binding.imageWeather)
-    }
-
-    private fun chekPermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != 0
-        ) {
-            permissionListener()
-            plauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-    }
-
-    private fun permissionListener() {
-        plauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (!it) chekPermission()
-        }
     }
 }

@@ -1,55 +1,79 @@
 package com.pride.weatherapp.logic
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pride.weatherapp.clases.Forecast
 import com.pride.weatherapp.clases.Hour
 import com.pride.weatherapp.clases.WeatherClass
+import com.pride.weatherapp.room.DataBase
+import com.pride.weatherapp.room.Name
 import com.pride.weatherapp.server.ApiRepo
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers.newThread
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class WeatherViewModel:ViewModel() {
-    private var repository = ApiRepo()
-    private var _currentWeather: MutableLiveData<WeatherClass> = MutableLiveData()
-    private var _daysWeather: MutableLiveData<Forecast> = MutableLiveData()
-    private var _selectedHours: MutableLiveData<ArrayList<Hour>> = MutableLiveData()
-    var currentWeather: MutableLiveData<WeatherClass> = MutableLiveData()
-    var daysWeather: MutableLiveData<Forecast> = MutableLiveData()
-    var obsHour : MutableLiveData<Boolean> = MutableLiveData()
-    var selectedHours : MutableLiveData<ArrayList<Hour>> = MutableLiveData()
+class WeatherViewModel(application:Application):AndroidViewModel(application) {
+    private val dataBase = DataBase.getDatabase(application.applicationContext)
+    private val repository = ApiRepo()
+    private var _currentWeather = MutableLiveData<WeatherClass>()
+    private var _daysWeather = MutableLiveData<Forecast>()
+    private var _selectedHours = MutableLiveData<ArrayList<Hour>>()
+    val checkPermission : LiveData<Name>
+        get() {
+            val permission = MutableLiveData<Name>()
+            dataBase.permissionDao().findText("Permission")
+                .subscribeOn(newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    permission.value = it
+                },{
+                })
+            return permission
+        }
+    val currentWeather: LiveData<WeatherClass>
+        get() = _currentWeather
+    val daysWeather: LiveData<Forecast>
+        get() = _daysWeather
+    val selectedHours : LiveData<ArrayList<Hour>>
+        get() = _selectedHours
+    var obsHour = MutableLiveData<Boolean>()
+    var message = MutableLiveData<String>()
 
-
-    fun getWeatherFromRepo(location:String,language: String) {
-
+    fun givePermission() {
         viewModelScope.launch {
-            repository.getCurrentWeather(location,language).enqueue(object : Callback<WeatherClass> {
-                override fun onResponse(
-                    call: Call<WeatherClass>,
-                    response: Response<WeatherClass>
-                ) {
-                    _currentWeather.value = response.body()
-                    currentWeather.value = _currentWeather.value
-                    _daysWeather.value = _currentWeather.value?.forecast
-                    daysWeather.value = _daysWeather.value
-                    _selectedHours.value = _daysWeather.value?.forecastday?.get(0)?.hour
-                    selectedHours.value = _selectedHours.value
-                }
-
-                override fun onFailure(call: Call<WeatherClass>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+            dataBase.permissionDao().insertToDB(Name(null,"Permission", true))
+                .subscribeOn(newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                }, {
+                    Log.d("error","error $it")
+                })
         }
     }
+
+    fun getWeatherFromRepo(location:String,language: String) {
+        viewModelScope.launch {
+            repository.getCurrentWeather(location,language)
+                .subscribeOn(newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    _currentWeather.value = it
+                    _daysWeather.value = _currentWeather.value?.forecast
+                    _selectedHours.value = _daysWeather.value?.forecastday?.get(0)?.hour
+                }, {
+                    message.value = it.message.toString()
+                })
+        }
+    }
+
     fun openDetailInfo(hours : ArrayList<Hour>) {
         viewModelScope.launch {
             obsHour.value = true
             _selectedHours.value = hours
-            selectedHours.value = _selectedHours.value
         }
     }
     fun openedDetail() {

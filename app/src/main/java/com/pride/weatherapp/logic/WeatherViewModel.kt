@@ -1,7 +1,6 @@
 package com.pride.weatherapp.logic
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +13,8 @@ import com.pride.weatherapp.room.Name
 import com.pride.weatherapp.server.ApiRepo
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers.newThread
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(application:Application):AndroidViewModel(application) {
@@ -44,14 +45,8 @@ class WeatherViewModel(application:Application):AndroidViewModel(application) {
     var message = MutableLiveData<String>()
 
     fun givePermission() {
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             dataBase.permissionDao().insertToDB(Name(null,"Permission", true))
-                .subscribeOn(newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                }, {
-                    Log.d("error","error $it")
-                })
         }
     }
 

@@ -52,16 +52,9 @@ class WeatherViewModel(application:Application):AndroidViewModel(application) {
 
     fun getWeatherFromRepo(location:String,language: String) {
         viewModelScope.launch {
-            repository.getCurrentWeather(location,language)
-                .subscribeOn(newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    _currentWeather.value = it
-                    _daysWeather.value = _currentWeather.value?.forecast
-                    _selectedHours.value = _daysWeather.value?.forecastday?.get(0)?.hour
-                }, {
-                    message.value = it.message.toString()
-                })
+            _currentWeather.value = repository.getCurrentWeather(location,language).body()
+            _daysWeather.value = _currentWeather.value?.forecast
+            _selectedHours.value = _daysWeather.value?.forecastday?.get(0)?.hour
         }
     }
 

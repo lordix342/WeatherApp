@@ -79,9 +79,9 @@ class MainFragment : Fragment() {
     }
 
     private fun getLocation() {
-        var permission: Boolean? = false
+        var permission: Boolean?
         weatherVM.checkPermission.observe(viewLifecycleOwner) { confirmPermission ->
-            if (confirmPermission != null) permission = confirmPermission.confirmation
+            permission = confirmPermission.confirmation
             if (permission == true) {
                 val locationManager =
                     requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager

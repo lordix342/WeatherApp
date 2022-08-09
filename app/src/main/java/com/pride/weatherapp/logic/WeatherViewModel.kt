@@ -1,69 +1,67 @@
 package com.pride.weatherapp.logic
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.pride.weatherapp.clases.Forecast
 import com.pride.weatherapp.clases.Hour
 import com.pride.weatherapp.clases.WeatherClass
 import com.pride.weatherapp.room.DataBase
 import com.pride.weatherapp.room.Name
 import com.pride.weatherapp.server.ApiRepo
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers.newThread
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WeatherViewModel(application:Application):AndroidViewModel(application) {
-    private val dataBase = DataBase.getDatabase(application.applicationContext)
-    private val repository = ApiRepo()
+@HiltViewModel
+class WeatherViewModel @Inject constructor(
+    private val dataBase: DataBase,
+    private val repository: ApiRepo
+) : ViewModel() {
     private var _currentWeather = MutableLiveData<WeatherClass>()
     private var _daysWeather = MutableLiveData<Forecast>()
     private var _selectedHours = MutableLiveData<ArrayList<Hour>>()
-    val checkPermission : LiveData<Name>
-        get() {
-            val permission = MutableLiveData<Name>()
-            dataBase.permissionDao().findText("Permission")
-                .subscribeOn(newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    permission.value = it
-                },{
-                })
-            return permission
-        }
+    val checkPermission = MutableLiveData(Name(null, "Permission", true))
     val currentWeather: LiveData<WeatherClass>
         get() = _currentWeather
     val daysWeather: LiveData<Forecast>
         get() = _daysWeather
-    val selectedHours : LiveData<ArrayList<Hour>>
+    val selectedHours: LiveData<ArrayList<Hour>>
         get() = _selectedHours
     var obsHour = MutableLiveData<Boolean>()
     var message = MutableLiveData<String>()
 
-    fun givePermission() {
-        CoroutineScope(Dispatchers.IO).launch {
-            dataBase.permissionDao().insertToDB(Name(null,"Permission", true))
+
+    fun getPermission() {
+        viewModelScope.launch {
+            checkPermission.value = CoroutineScope(Dispatchers.IO).async {
+                return@async dataBase.permissionDao().findText("Permission")
+            }.await()
         }
     }
 
-    fun getWeatherFromRepo(location:String,language: String) {
+    fun sendPermission() {
+        CoroutineScope(Dispatchers.IO).launch {
+            dataBase.permissionDao().insertToDB(Name(null, "Permission", true))
+        }
+    }
+
+    fun getWeatherFromRepo(location: String, language: String) {
         viewModelScope.launch {
-            _currentWeather.value = repository.getCurrentWeather(location,language).body()
+            _currentWeather.value = repository.getCurrentWeather(location, language).body()
             _daysWeather.value = _currentWeather.value?.forecast
             _selectedHours.value = _daysWeather.value?.forecastday?.get(0)?.hour
         }
     }
 
-    fun openDetailInfo(hours : ArrayList<Hour>) {
+    fun openDetailInfo(hours: ArrayList<Hour>) {
         viewModelScope.launch {
             obsHour.value = true
             _selectedHours.value = hours
         }
     }
+
     fun openedDetail() {
         viewModelScope.launch {
             obsHour.value = false

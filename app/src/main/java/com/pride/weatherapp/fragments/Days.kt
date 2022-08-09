@@ -13,6 +13,7 @@ import com.pride.weatherapp.logic.ClickListener
 import com.pride.weatherapp.logic.RecyclerAdapter
 import com.pride.weatherapp.logic.WeatherViewModel
 
+
 class Days : Fragment(), ClickListener {
     private lateinit var binding:FragmentDaysBinding
     private val weatherVM : WeatherViewModel by activityViewModels()

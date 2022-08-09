@@ -17,11 +17,13 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val dataBase: DataBase,
-    private val repository: ApiRepo
+    private val apiWeather: ApiRepo
 ) : ViewModel() {
+
     private var _currentWeather = MutableLiveData<WeatherClass>()
     private var _daysWeather = MutableLiveData<Forecast>()
     private var _selectedHours = MutableLiveData<ArrayList<Hour>>()
+
     val checkPermission = MutableLiveData(Name(null, "Permission", true))
     val currentWeather: LiveData<WeatherClass>
         get() = _currentWeather
@@ -30,7 +32,6 @@ class WeatherViewModel @Inject constructor(
     val selectedHours: LiveData<ArrayList<Hour>>
         get() = _selectedHours
     var obsHour = MutableLiveData<Boolean>()
-    var message = MutableLiveData<String>()
 
 
     fun getPermission() {
@@ -49,7 +50,7 @@ class WeatherViewModel @Inject constructor(
 
     fun getWeatherFromRepo(location: String, language: String) {
         viewModelScope.launch {
-            _currentWeather.value = repository.getCurrentWeather(location, language).body()
+            _currentWeather.value = apiWeather.getCurrentWeather(location, language).body()
             _daysWeather.value = _currentWeather.value?.forecast
             _selectedHours.value = _daysWeather.value?.forecastday?.get(0)?.hour
         }

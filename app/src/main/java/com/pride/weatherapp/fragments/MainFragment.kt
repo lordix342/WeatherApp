@@ -37,8 +37,6 @@ import java.util.*
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var latitude: String
-    private lateinit var longitude: String
     private val fragmentList = listOf(Days(), Hours())
     private val weatherVM: WeatherViewModel by activityViewModels()
 
@@ -50,8 +48,8 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         getLocation()
     }
 
@@ -66,9 +64,6 @@ class MainFragment : Fragment() {
             getAgree()
         }
         getLocation()
-        weatherVM.message.observe(viewLifecycleOwner) {
-            if (it != null) Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-        }
         weatherVM.currentWeather.observe(viewLifecycleOwner) {
             if (it != null) initCurrent(it)
         }
@@ -107,9 +102,7 @@ class MainFragment : Fragment() {
                         fusedLocationProviderClient.lastLocation.addOnCompleteListener {
                             val location: Location? = it.result
                             if (location != null) {
-                                latitude = location.latitude.toString()
-                                longitude = location.longitude.toString()
-                                isConnected()
+                                isConnected(location.latitude.toString(),location.longitude.toString())
                             }
                         }
                     } else {
@@ -127,7 +120,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun isConnected() {
+    private fun isConnected(latitude: String,longitude: String ) {
         val connectivityManager =
             activity?.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager.registerDefaultNetworkCallback(object :
@@ -178,7 +171,7 @@ class MainFragment : Fragment() {
         with(binding) {
             textCountry.text = dataCurrent.location.country
             cityName.text = dataCurrent.location.name
-            temperature.text = dataCurrent.current.tempC.toString() + " °C"
+            temperature.text = "${dataCurrent.current.tempC} °C"
             textRegion.text = dataCurrent.location.region
         }
         Glide.with(requireContext())

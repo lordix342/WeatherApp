@@ -1,12 +1,12 @@
 package com.pride.weatherapp.server
 
 import com.pride.weatherapp.clases.WeatherClass
-import io.reactivex.rxjava3.core.Observable
-import retrofit2.Call
 import retrofit2.Response
+import javax.inject.Inject
 
-class ApiRepo {
+class ApiRepo @Inject constructor(private val apiInterface: ApiInterface) {
+
     suspend fun getCurrentWeather(location:String,language: String): Response<WeatherClass> {
-        return ApiInstance.api.getWeather(location,language)
+        return apiInterface.getWeather(location,language)
     }
 }

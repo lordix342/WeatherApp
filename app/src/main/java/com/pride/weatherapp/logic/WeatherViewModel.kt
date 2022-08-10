@@ -1,6 +1,10 @@
 package com.pride.weatherapp.logic
 
-import androidx.lifecycle.*
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.pride.weatherapp.clases.Forecast
 import com.pride.weatherapp.clases.Hour
 import com.pride.weatherapp.clases.WeatherClass

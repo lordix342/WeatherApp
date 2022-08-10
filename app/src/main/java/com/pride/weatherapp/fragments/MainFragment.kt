@@ -3,22 +3,21 @@ package com.pride.weatherapp.fragments
 
 import android.Manifest
 import android.content.Context
-import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import android.location.LocationManager.GPS_PROVIDER
-import android.net.ConnectivityManager
-import android.net.Network
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -32,6 +31,7 @@ import com.pride.weatherapp.clases.WeatherClass
 import com.pride.weatherapp.databinding.FragmentMainBinding
 import com.pride.weatherapp.logic.PageAdapter
 import com.pride.weatherapp.logic.WeatherViewModel
+import com.pride.weatherapp.server.NetworkHelper
 import java.util.*
 
 class MainFragment : Fragment() {
@@ -77,81 +77,80 @@ class MainFragment : Fragment() {
     }
 
     private fun getLocation() {
-        var permission: Boolean?
         weatherVM.getPermission()
         weatherVM.checkPermission.observe(viewLifecycleOwner) { confirmPermission ->
-            if (confirmPermission!=null) {
-                permission = confirmPermission.confirmation
-                if (permission == true) {
-                    val locationManager =
-                        requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager
-                    if (locationManager.isProviderEnabled(GPS_PROVIDER)) {
-                        binding.gpsEnable.visibility = View.GONE
-                        fusedLocationProviderClient =
-                            LocationServices.getFusedLocationProviderClient(requireContext())
-                        if (ActivityCompat.checkSelfPermission(
-                                requireContext(),
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                requireContext(),
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            Toast.makeText(requireContext(), "No permission to find location", Toast.LENGTH_LONG).show()
-                        }
-                        fusedLocationProviderClient.lastLocation.addOnCompleteListener {
-                            val location: Location? = it.result
-                            if (location != null) {
-                                isConnected(location.latitude.toString(),location.longitude.toString())
-                            }
-                        }
-                    } else {
-                        if ((!binding.gpsError.isVisible) && (!binding.internetError.isVisible)) {
-                            binding.gpsEnable.visibility = View.VISIBLE
-                            binding.bEnableGps.setOnClickListener {
-                                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            }
+            if (confirmPermission?.confirmation == true) {
+                val locationManager =
+                    requireActivity().getSystemService(LOCATION_SERVICE) as LocationManager
+                if (locationManager.isProviderEnabled(GPS_PROVIDER)) {
+                    binding.gpsEnable.visibility = View.GONE
+                    fusedLocationProviderClient =
+                        LocationServices.getFusedLocationProviderClient(requireContext())
+                    checkingPermission()
+                    fusedLocationProviderClient.lastLocation.addOnCompleteListener {
+                        val location: Location? = it.result
+                        if (location != null) {
+                            isConnected(
+                                location.latitude.toString(),
+                                location.longitude.toString()
+                            )
                         }
                     }
                 } else {
-                    Toast.makeText(requireContext(), "No permission", Toast.LENGTH_LONG).show()
+                    if ((!binding.gpsError.isVisible) && (!binding.internetError.isVisible)) {
+                        binding.gpsEnable.visibility = View.VISIBLE
+                        binding.bEnableGps.setOnClickListener {
+                            startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                        }
+                    }
                 }
+            } else {
+                Toast.makeText(requireContext(), "No permission", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun isConnected(latitude: String,longitude: String ) {
-        val connectivityManager =
-            activity?.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
-        connectivityManager.registerDefaultNetworkCallback(object :
-            ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) {
-                weatherVM.getWeatherFromRepo(
-                    "$latitude,$longitude",
-                    Locale.getDefault().language.toString()
-                )
-            }
+    private fun isConnected(latitude: String, longitude: String) {
+        if (NetworkHelper(requireContext()).isNetworkConnected()) {
+            weatherVM.getWeatherFromRepo(
+                "$latitude,$longitude",
+                Locale.getDefault().language.toString()
+            )
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "No internet connection",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
-            override fun onUnavailable() {
-                super.onUnavailable()
-                if (!binding.gpsError.isVisible) binding.internetError.visibility = View.VISIBLE
-            }
-        })
+    private fun checkingPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(
+                requireContext(),
+                "No permission to GPS",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun chekGPSAgree() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        val agree = sharedPref?.getInt("Agree", 0)
-        if (agree != 1) binding.gpsError.visibility = View.VISIBLE
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)?.getInt("Agree", 0)
+        if (sharedPref != 1) binding.gpsError.visibility = View.VISIBLE
     }
 
     private fun getAgree() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        if (sharedPref != null) {
-            with(sharedPref.edit()) {
-                putInt("Agree", 1)
-                apply()
-            }
+        activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
+            putInt("Agree", 1)
+            apply()
         }
         binding.gpsError.visibility = View.GONE
         getLocation()

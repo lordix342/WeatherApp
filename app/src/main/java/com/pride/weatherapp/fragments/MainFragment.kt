@@ -59,10 +59,6 @@ class MainFragment : Fragment() {
         weatherVM.obsHour.observe(viewLifecycleOwner) {
             if (it) binding.pager.currentItem = 1
         }
-        chekGPSAgree()
-        binding.bTryGps.setOnClickListener {
-            getAgree()
-        }
         getLocation()
         weatherVM.currentWeather.observe(viewLifecycleOwner) {
             if (it != null) initCurrent(it)
@@ -140,20 +136,6 @@ class MainFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
         }
-    }
-
-    private fun chekGPSAgree() {
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)?.getInt("Agree", 0)
-        if (sharedPref != 1) binding.gpsError.visibility = View.VISIBLE
-    }
-
-    private fun getAgree() {
-        activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
-            putInt("Agree", 1)
-            apply()
-        }
-        binding.gpsError.visibility = View.GONE
-        getLocation()
     }
 
     private fun initViewPager() {

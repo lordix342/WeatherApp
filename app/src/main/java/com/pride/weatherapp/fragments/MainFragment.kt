@@ -2,7 +2,6 @@ package com.pride.weatherapp.fragments
 
 
 import android.Manifest
-import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,13 +10,11 @@ import android.location.LocationManager
 import android.location.LocationManager.GPS_PROVIDER
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -93,7 +90,7 @@ class MainFragment : Fragment() {
                         }
                     }
                 } else {
-                    if ((!binding.gpsError.isVisible) && (!binding.internetError.isVisible)) {
+                    if (!binding.internetError.isVisible) {
                         binding.gpsEnable.visibility = View.VISIBLE
                         binding.bEnableGps.setOnClickListener {
                             startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
